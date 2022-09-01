@@ -1,4 +1,4 @@
-- hosts: localhost
+- hosts: masternode
   become: yes
   tasks:
     - name: Download k3s install script

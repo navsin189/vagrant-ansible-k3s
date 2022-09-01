@@ -1,4 +1,4 @@
-- hosts: 127.0.0.1
+- hosts: workernode
   become: yes
   tasks:
     - name: Download k3s install script

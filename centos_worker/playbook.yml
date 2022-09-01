@@ -1,0 +1,23 @@
+- hosts: 127.0.0.1
+  become: yes
+  tasks:
+    - name: Download k3s install script
+      get_url: 
+        url: https://get.k3s.io
+        dest: /vagrant/install.sh
+
+    - name: running install.sh with defined environments
+      command: sh /vagrant/install.sh
+      environment:
+        INSTALL_K3S_SELINUX_WARN: true
+        INSTALL_K3S_SKIP_SELINUX_RPM: true
+        K3S_KUBECONFIG_MODE: "644"
+        K3S_URL: https://192.168.50.4:6443
+        K3S_TOKEN: sunny
+      register: k3s_agent_install
+    
+    - name: starting service k3s
+      service:
+        name: k3s-agent
+        state: started
+      when: k3s_agent_install.changed == true

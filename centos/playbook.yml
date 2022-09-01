@@ -1,35 +1,22 @@
 - hosts: localhost
   become: yes
   tasks:
-    - name: Download k3s binary
-      # command: " curl -sfL https://get.k3s.io | INSTALL_K3S_SELINUX_WARN=true INSTALL_K3S_SKIP_SELINUX_RPM=true sh -"
+    - name: Download k3s install script
       get_url: 
         url: https://get.k3s.io
         dest: /vagrant/install.sh
 
-    - name: running install.sh
+    - name: running install.sh with defined environments
       command: sh /vagrant/install.sh
       environment:
         INSTALL_K3S_SELINUX_WARN: true
         INSTALL_K3S_SKIP_SELINUX_RPM: true
-
-    - name: getting the private IP of machine
-      command: "hostname -I"
-      register: private_ip
-    
-    - debug: 
-        var: private_ip.stdout
+        K3S_KUBECONFIG_MODE: "644"
+        K3S_TOKEN: sunny
+      register: k3s_server_install
     
     - name: starting service k3s
       service:
         name: k3s
         state: started
-    
-    - name: getting the node token
-      command: cat /var/lib/rancher/k3s/server/node-token
-      register: token_value
-      become: yes
-    
-    - name: getting the node tokens
-      debug:
-        var: token_value.stdout
+      when: k3s_server_install.changed == true

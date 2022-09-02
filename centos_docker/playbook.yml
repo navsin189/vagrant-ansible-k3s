@@ -1,0 +1,68 @@
+- hosts: agentnode
+  tasks:
+    # - name: installing net-tools, wget, python3
+    #   yum:
+    #     name:
+    #       - net-tools
+    #       - wget
+    #       - python3
+    #   become: yes
+    # - name: creating symlink path
+    #   file:
+    #     src: /usr/bin/python3.6
+    #     dest: /usr/bin/python
+    #     state: link
+    #     force: yes
+    # - name: updating pip apiVersion
+    - name: "docker is present or not"
+      command: rpm -qa docker-ce
+      register: check
+
+    - name: "downloading docker-ce version 18"
+      yum:
+        name: https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-18.06.0.ce-3.el7.x86_64.rpm
+        disable_gpg_check: yes
+        state: present
+      tags:
+        - install_docker
+      when: check.stdout != "docker-ce-18.06.0.ce-3.el7.x86_64"
+      register: docker
+      become: yes
+    
+    - debug:
+        msg: "Docker is already installed"
+      when: docker['changed'] == false
+
+    - debug:
+        msg: "Docker-ce successfully installed"
+      when: docker['changed'] == true
+    
+    - name: "starting service"
+      service:
+        name: docker
+        state: started
+      tags:
+        - start_docker
+      become: yes
+
+    - name: "installing docker python library"
+      pip:
+        name: docker
+
+    # - name: "pulling hello-world image"
+    #   docker_image:
+    #     name: hello-world
+    #     source: pull
+    #   tags:
+    #     - docker-image
+    #   become: yes
+
+    # - name: "launching hello-world image container"
+    #   docker_container:
+    #     name: myfirstcontainer
+    #     image: hello-world
+    #     state: present
+    #   tags:
+    #     - launch_container
+    #   become: yes
+

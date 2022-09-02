@@ -1,4 +1,4 @@
-- hosts: workernode
+- hosts: localhost
   become: yes
   tasks:
     - name: Download k3s install script
@@ -19,5 +19,6 @@
     - name: starting service k3s
       service:
         name: k3s-agent
-        state: started
+        state: restarted
       when: k3s_agent_install.changed == true
+      become: yes

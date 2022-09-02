@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-deployment
+  labels:
+    app: mongodb
+spec: #this spec meant for deployment
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      name: mongodb_pod
+      labels:
+        app: mongodb
+        environment: 'production'
+    spec:
+      containers:
+      - name: mongodb
+        image: mongodb:5.0
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: cm9vdAo=
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          value: d2ViQXBwREIK
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+    app: mongodb #should be shame as pod's metadata's label
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017 #should be same as containerport

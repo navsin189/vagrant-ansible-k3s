@@ -1,39 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongodb-deployment
+  name: postgres-deployment
   labels:
-    app: mongodb
+    app: postgres
 spec: #this spec meant for deployment
   replicas: 1
   selector:
     matchLabels:
-      app: mongodb
+      app: postgres
   template:
     metadata:
-      name: mongodb_pod
+      name: postgres_pod
       labels:
-        app: mongodb
+        app: postgres
         environment: 'production'
     spec:
       containers:
-      - name: mongodb
-        image: mongodb:5.0
+      - name: postgres
+        image: postgres:13
         ports:
-        - containerPort: 27017
+        - containerPort: 5432
         env:
-        - name: MONGO_INITDB_ROOT_USERNAME
-          value: cm9vdAo=
-        - name: MONGO_INITDB_ROOT_PASSWORD
-          value: d2ViQXBwREIK
+        - name: POSTGRES_PASSWORD
+          value: Z29vZGJveUAK
+        - name: POSTGRES_DB
+          value: Y2xpZW50Cg==
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongo-service
+  name: postgres-service
 spec:
   selector:
-    app: mongodb #should be shame as pod's metadata's label
+    app: postgres #should be shame as pod's metadata's label
   ports:
     - protocol: TCP
       port: 27017

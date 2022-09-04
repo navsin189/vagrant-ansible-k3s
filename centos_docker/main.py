@@ -6,11 +6,11 @@ import psycopg2,os
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
-DATABASE = os.environ["DATABASE"]
-USER = os.environ["USER"]
-PASSWORD = os.environ["PASSWORD"]
-HOST = os.environ["HOST"]
-PORT = os.environ["PORT"]
+DATABASE = os.environ.get("DATABASE"," ")
+USER = os.environ.get("USER"," ")
+PASSWORD = os.environ.get("PASSWORD"," ")
+HOST = os.environ.get("HOST", " ")
+PORT = os.environ.get("PORT"," ")
 
 @app.get("/")
 def read_root(request: Request):
@@ -33,7 +33,8 @@ async def signup(request: Request,username: str = Form(),password: str = Form(),
         connection.close()
         return templates.TemplateResponse("index.html",{"request": request,"msg":"Successfully registered, please login"})
     except:
-        return {"created" : "unSuccessful"}
+        return templates.TemplateResponse("error.html",{"request": request,"status_code":"500","msg":"Server under maintenance"})
+
 
 @app.post("/login/")
 async def signup(request: Request,password: str = Form(),email: str = Form()):

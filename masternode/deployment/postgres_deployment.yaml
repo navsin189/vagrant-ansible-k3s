@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+  labels:
+    app: postgres
+spec: #this spec meant for deployment
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      name: postgres_pod
+      labels:
+        app: postgres
+        environment: 'production'
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:13
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_PASSWORD
+          value: Z29vZGJveUAK
+        - name: POSTGRES_DB
+          value: d2ViYXBwCg==
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+spec:
+  selector:
+    app: postgres #should be shame as pod's metadata's label
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432 #should be same as containerport

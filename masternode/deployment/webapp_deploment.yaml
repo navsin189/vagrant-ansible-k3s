@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  labels:
+    app: webapp
+spec: #this spec meant for deployment
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp
+  template: #template equals to webapp_pod.yml that inlining ngnix_pod.yml
+    metadata:
+      name: webapp_pod
+      labels:
+        app: webapp
+        environment: 'production'
+    spec:
+      containers:
+      - name: webapp
+        image: navsin189/webapp:v1.0
+        ports:
+        - containerPort: 80
+        env:
+        - name: DATABASE
+          value: d2ViYXBwCg==
+        - name: USER
+          value: cG9zdGdyZXMK
+        - name: HOST
+          value: postgres-service
+        - name: PORT
+          value: 5432
+        - name: PASSWORD
+          value: Z29vZGJveUAK
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+spec:
+  type: NodePort
+  selector:
+    app: webapp #should be shame as pod's metadata's label
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80 #should be same as containerport
+      nodePort: 30124 #webapp homepage will available on workernodeIP:30124

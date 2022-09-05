@@ -1,0 +1,13 @@
+apiVersion: v1 #version of api-server
+kind: Pod # what kind of service we want. For deployment-> kind: Deployment 
+metadata:
+  name: label-demo
+  labels: #Labels can be used to select objects and to find collections of objects that satisfy certain conditions
+    environment: production
+    app: nginx
+spec: #declare the specification you want
+  containers:
+  - name: nginx
+    image: nginx:1.14.2
+    ports:
+    - containerPort: 80

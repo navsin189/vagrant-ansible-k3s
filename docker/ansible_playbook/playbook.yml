@@ -1,19 +1,5 @@
-- hosts: agentnode
+- hosts: docker
   tasks:
-    # - name: installing net-tools, wget, python3
-    #   yum:
-    #     name:
-    #       - net-tools
-    #       - wget
-    #       - python3
-    #   become: yes
-    # - name: creating symlink path
-    #   file:
-    #     src: /usr/bin/python3.6
-    #     dest: /usr/bin/python
-    #     state: link
-    #     force: yes
-    # - name: updating pip apiVersion
     - name: "docker is present or not"
       command: rpm -qa docker-ce
       register: check
@@ -44,25 +30,11 @@
       tags:
         - start_docker
       become: yes
+    - name: downloading pip module for python2
+      get_url:
+        url: https://bootstrap.pypa.io/pip/2.7/get-pip.py
+        dest: /vagrant/
 
-    - name: "installing docker python library"
-      pip:
-        name: docker
-
-    # - name: "pulling hello-world image"
-    #   docker_image:
-    #     name: hello-world
-    #     source: pull
-    #   tags:
-    #     - docker-image
-    #   become: yes
-
-    # - name: "launching hello-world image container"
-    #   docker_container:
-    #     name: myfirstcontainer
-    #     image: hello-world
-    #     state: present
-    #   tags:
-    #     - launch_container
-    #   become: yes
-
+    - name: installing pip module
+      command: python /vagrant/get-pip.py
+      become: yes

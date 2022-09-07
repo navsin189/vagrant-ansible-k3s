@@ -14,4 +14,12 @@ workernode   Ready    <none>                 14m    v1.24.4+k3s1
 - I was getting `503:connection refused` error and didn't know why.
 
 ## Findings:
-- 
+- On Vagrant the first adapter that is `eth0` and it is configured for **NAT**.
+- Vagrant uses it for basic communication.
+- But I have to use **bridge** network that can be *adapter2* or *adapter3* but as I said **workernode** will try to connect to `eth0`. 
+- On github issues it is mentioned to run k3s like `k3s server   --node-external-ip 192.168.50.4 --node-ip 192.168.50.4`
+- but I want to run it through systemctl instead of manually.
+- So I read `/etc/systemd/system/k3s.service` file and checked for start command.
+- Then I changed `ExecStart=/usr/local/bin/k3s server --node-external-ip 192.168.50.4  --node-ip 192.168.50.4 \` from `ExecStart=/usr/local/bin/k3s server`
+- `192.168.50.4` is my master node IP.
+- **After that connection was established and I was able to connect to pods shell**.

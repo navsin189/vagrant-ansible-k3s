@@ -23,15 +23,15 @@ spec: #this spec meant for deployment
         - containerPort: 80
         env:
         - name: DATABASE
-          value: d2ViYXBwCg==
+          value: customer
         - name: USER
-          value: cG9zdGdyZXMK
+          value: postgres
         - name: HOST
           value: postgres-service
         - name: PORT
-          value: 5432
+          value: "5432"
         - name: PASSWORD
-          value: Z29vZGJveUAK
+          value: cancelThePlan
 ---
 apiVersion: v1
 kind: Service

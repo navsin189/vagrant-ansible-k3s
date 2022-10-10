@@ -23,9 +23,9 @@ spec: #this spec meant for deployment
         - containerPort: 5432
         env:
         - name: POSTGRES_PASSWORD
-          value: Z29vZGJveUAK
+          value: cancelThePlan
         - name: POSTGRES_DB
-          value: d2ViYXBwCg==
+          value: customer
 ---
 apiVersion: v1
 kind: Service

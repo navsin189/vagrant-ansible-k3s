@@ -25,5 +25,7 @@ workernode   Ready    <none>                 14m    v1.24.4+k3s1
 - **After that connection was established and I was able to connect to pods shell**.
 
 > If you don't want to use Ansible as a provisioner then you can setup k3s master by simply running 
-`curl -sfL https://get.k3s.io | INSTALL_K3S_SELINUX_WARN=true INSTALL_K3S_SKIP_SELINUX_RPM=true K3S_KUBECONFIG_MODE=644 K3S_TOKEN=YOUR_TOKEN_VALUE sh -`
+```
+curl -sfL https://get.k3s.io | INSTALL_K3S_SELINUX_WARN=true INSTALL_K3S_SKIP_SELINUX_RPM=true K3S_KUBECONFIG_MODE=644 K3S_TOKEN=YOUR_TOKEN_VALUE sh -
+```
 > INSTALL_K3S_SELINUX_WARN=true INSTALL_K3S_SKIP_SELINUX_RPM=true is optional. It may work without these in your case.

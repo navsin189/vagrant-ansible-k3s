@@ -18,7 +18,7 @@ spec: #this spec meant for deployment
     spec:
       containers:
       - name: webapp
-        image: navsin189/webapp:v1.0
+        image: navsin189/webapp:v2.0
         ports:
         - containerPort: 80
         env:

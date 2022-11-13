@@ -1,6 +1,26 @@
 - hosts: workernode
   become: yes
   tasks:
+    - name: disable swap
+      command: "{{ item.cmd }}"
+      become: yes
+      loop:
+        - {cmd: "swapoff -a"}
+      tags: swap
+
+    - name: update /etc/hosts file for nodes
+      blockinfile:
+        path: /etc/hosts
+        block: |
+          192.168.50.4 masternode
+          192.168.50.9 workernode
+      become: yes
+
+    - name: stop firewalld
+      service:
+        name: firewalld
+        state: stopped
+      become: yes
     - name: Download k3s install script
       get_url: 
         url: https://get.k3s.io
@@ -9,11 +29,9 @@
     - name: running install.sh with defined environments
       command: sh /vagrant/install.sh
       environment:
-        INSTALL_K3S_SELINUX_WARN: true
-        INSTALL_K3S_SKIP_SELINUX_RPM: true
         K3S_KUBECONFIG_MODE: "644"
         K3S_URL: https://192.168.50.4:6443
-        K3S_TOKEN: sunny
+        K3S_TOKEN: rocky
       register: k3s_agent_install
     
     - name: starting service k3s

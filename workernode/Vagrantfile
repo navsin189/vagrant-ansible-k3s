@@ -1,14 +1,16 @@
 Vagrant.configure("2") do |config|
   config.vm.define "workernode" do |subconfig|
-    subconfig.vm.box = "centos/7"
-    subconfig.vm.hostname = "workernode"
-    subconfig.vm.network "private_network", ip: "192.168.50.9"
-    subconfig.vm.network "public_network", bridge: "BRIDGE"
+    subconfig.vm.box = "rockylinux/8"
+    subconfig.vm.box_version = "4.0.0"
+    subconfig.vm.hostname = "workernode" 
+    subconfig.vm.network "public_network"
+    subconfig.vm.network "private_network" ,ip: "192.168.50.9"
   end
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "1024"
   end
   config.vm.provision "ansible_local" do |ansible|
     ansible.playbook = "/vagrant/ansible_playbook/playbook.yml"
+    ansible.limit = "all,masternode,workernode*"
   end
 end

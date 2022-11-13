@@ -21,6 +21,7 @@ workernode   Ready    <none>                 14m    v1.24.4+k3s1
 - but I want to run it through systemctl instead of manually.
 - So I read `/etc/systemd/system/k3s.service` file and checked for start command.
 - Then I changed `ExecStart=/usr/local/bin/k3s server --node-external-ip 192.168.50.4  --node-ip 192.168.50.4 \` from `ExecStart=/usr/local/bin/k3s server`
+- reload the systemd daemon `sudo systemctl daemon-reload`
 - `192.168.50.4` is my master node IP.
 - **After that connection was established and I was able to connect to pods shell**.
 
@@ -29,3 +30,6 @@ workernode   Ready    <none>                 14m    v1.24.4+k3s1
 curl -sfL https://get.k3s.io | INSTALL_K3S_SELINUX_WARN=true INSTALL_K3S_SKIP_SELINUX_RPM=true K3S_KUBECONFIG_MODE=644 K3S_TOKEN=YOUR_TOKEN_VALUE sh -
 ```
 > INSTALL_K3S_SELINUX_WARN=true INSTALL_K3S_SKIP_SELINUX_RPM=true is optional. It may work without these in your case.
+
+## Update:
+- I have updated the playbook for the same.

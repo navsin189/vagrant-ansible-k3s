@@ -1,0 +1,26 @@
+pipeline {
+    agent {
+        kubernetes {
+            yaml '''
+apiVersion: v1
+kind: Pod
+metadata:
+  name: webapp-colour
+spec:
+  containers:
+  - name: webapp
+    image: navsin189/bg-colour-webapp:2.0
+'''
+            inheritFrom 'web'
+        }
+    }
+    stages {
+        stage('Check Kubernetes Agent') {
+            steps {
+                container('webapp') {
+                    sh 'ps auxf'
+                }
+            }
+        }
+    }
+}

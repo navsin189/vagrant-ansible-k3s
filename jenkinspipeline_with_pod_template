@@ -1,0 +1,31 @@
+pipeline {
+    agent {
+    kubernetes {
+    //   label 'vagrant-k3s'
+      inheritFrom 'web'
+    //   label 'web'
+    }
+  }
+    stages {
+        stage('webapp api test') {
+            steps {
+                script {
+                    podTemplate(containers: [
+                        containerTemplate(
+                            name: 'webapp',
+                            image: 'navsin189/bg-colour-webapp:2.0',
+                            // command: 'cat',
+                            ttyEnabled: true
+                        )
+                    ]) {
+                        node(POD_LABEL) {
+                            container('webapp') {
+                                sh 'ps auxf'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

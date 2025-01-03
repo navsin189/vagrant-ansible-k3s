@@ -1,0 +1,30 @@
+pipeline {
+    agent {
+    kubernetes {
+      label 'vagrant-k8s'
+    }
+  }
+    stages {
+        stage('Run Nginx Test') {
+            steps {
+                script {
+                    podTemplate(containers: [
+                        containerTemplate(
+                            name: 'nginx',
+                            image: 'nginx:latest',
+                            // command: 'cat',
+                            // ttyEnabled: true
+                        )
+                    ]) {
+                        node(POD_LABEL) {
+                            container('nginx') {
+                                sh 'nginx -t'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
